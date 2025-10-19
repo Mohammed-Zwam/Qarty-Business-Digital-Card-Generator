@@ -1,0 +1,301 @@
+/*=================================================[GLOBAL]=================================================*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Somar;
+}
+
+body {
+  min-height: 100dvh;
+  height: fit-content;
+  background-color: var(--bg-1) !important;
+}
+
+html, body {
+  scroll-behavior: auto !important;
+  scroll-padding-top: 75px;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(307deg, var(--bg-1), var(--bg-2), var(--bg-3), var(--bg-5));
+  z-index: 2;
+  opacity: .5;
+}
+
+@font-face {
+  font-family: "Somar";
+  src: url("/public/assets/Fonts/Somar/ArbFONTS-Somar-Light.otf");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Somar";
+  src: url("/public/assets/Fonts/Somar/ArbFONTS-Somar-Medium.otf");
+  font-weight: 500;
+}
+
+
+@font-face {
+  font-family: "Somar";
+  src: url("/public/assets/Fonts/Somar/ArbFONTS-Somar-Bold.otf");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Somar";
+  src: url("/public/assets/Fonts/Somar/ArbFONTS-Somar-ExtraBold.otf");
+  font-weight: 800;
+}
+
+:root {
+  --bg-1: #08083d;
+  --bg-2: #0b0b54;
+  --bg-3: #11107a;
+  --bg-4: darkblue;
+  --bg-5: #0000ff;
+
+  --main-txt-1: #aaa;
+  --main-txt-2: #ccc;
+  --main-txt-3: #ddd;
+  --second-txt: rgb(0, 0, 214);
+  --txt-shadow: 0 0 5px rgba(0, 0, 0, 0.75);
+}
+
+.overlay-bg {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  backdrop-filter: blur(15px) !important;
+  background-color: rgba(0, 0, 46, 0.17) !important;
+}
+
+.txt1 {
+  color: var(--main-txt-1) !important;
+}
+
+.txt2 {
+  color: var(--main-txt-2) !important;
+}
+
+.txt3 {
+  color: var(--main-txt-3) !important;
+}
+
+.txt4 {
+  color: var(--second-txt) !important;
+}
+
+.txt-shadow {
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.75);
+}
+
+.main-border {
+  border: 2px dashed var(--bg-5) !important;
+}
+
+.border-btm {
+  border-bottom: 2px dotted var(--bg-5) !important;
+}
+
+.img-animation {
+  animation: img-moving 5s ease-in-out infinite alternate;
+}
+
+@keyframes img-moving {
+  from {
+    transform: translateY(20px);
+  }
+
+  to {
+    transform: translateY(-30px);
+  }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: blue;
+  border-radius: 10px;
+}
+
+
+/*=================================================[APP]=================================================*/
+.App {
+  position: relative;
+  z-index: 5;
+  min-height: 100dvh;
+  height: fit-content;
+}
+
+
+.platform-logo {
+  color: #fff !important;
+  width: fit-content !important;
+}
+
+.platform-logo::first-letter {
+  font-family: monospace !important;
+  color: var(--second-txt) !important;
+}
+
+.min-h-100 {
+  min-height: 90dvh !important;
+}
+
+
+
+/*=================================================[Custom Motion]=================================================*/
+.motion {
+  animation: motion-animation .6s ease-in-out forwards;
+}
+
+@keyframes motion-animation {
+  from {
+    transform: translateY(80px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/*=================================================[ALERTS]=================================================*/
+
+/* Success message icon */
+.ant-message-success .anticon svg,
+.ant-notification-notice-icon-success svg {
+  color: green !important;
+}
+
+
+/* Error message icon */
+.ant-message-error .anticon svg,
+.ant-notification-notice-icon-error svg {
+  color: #ff4d4f !important;
+}
+
+/* Info message icon */
+.ant-message-info .anticon svg,
+.ant-notification-notice-icon-info svg {
+  color: #1677ff !important;
+}
+
+/* Warning message icon */
+.ant-message-warning .anticon svg,
+.ant-notification-notice-icon-warning svg {
+  color: #faad14 !important;
+}
+
+.ant-message-custom-content {
+  font-size: 25px !important;
+}
+
+.ant-message-custom-content svg {
+  font-size: 20px !important;
+}
+
+.ant-notification-notice {
+  padding: 10px !important;
+}
+
+.ant-notification-notice-description {
+  font-size: 22px !important;
+  color: white !important;
+  line-height: 1;
+}
+
+.ant-notification-notice-message {
+  font-size: 25px !important;
+  color: white !important;
+}
+
+.ant-notification-notice-wrapper,
+.ant-notification-notice {
+  background-color: var(--bg-3) !important;
+}
+
+.ant-notification-notice-icon {
+  margin-top: 7px !important;
+}
+
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px rgba(0, 0, 255, 0.1) inset !important;
+  -webkit-text-fill-color: #fff !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: white !important;
+}
+
+.auth-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  animation: appear 0s .5s forwards;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+.congrats-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
+.manage-page .ant-divider {
+  border-color: blue !important;
+}
+
+/*=================================================[FOOTER]=================================================*/
+.footer {
+  border-top: 2px dotted blue;
+}
+
+
+
+
+@media (max-width: 1000px) {
+  .landing {
+    flex-direction: column-reverse;
+    gap: 50px;
+  }
+
+  .landing img {
+    width: 100% !important;
+  }
+}

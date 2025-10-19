@@ -1,0 +1,51 @@
+.shape-container {
+    width: 18%;
+    min-width: 100px;
+    aspect-ratio: 1/1;
+    position: relative;
+    position: fixed;
+    border: 3px dotted var(--bg-5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: .4;
+    z-index: -1;
+}
+
+.shape-container.btm.lft.cir {
+    bottom: 0;
+    left: 0;
+    transform: translateX(-30%) translateY(30%);
+    border-radius: 50%;
+}
+
+.shape-container.rgt.ctr.sq {
+    top: 50%;
+    right: 0;
+    transform: translateX(50%) translateY(-50%);
+    border-radius: 20px;
+}
+
+.shape-container.top.ctr.tr {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-70%) rotate(45deg);
+    border-radius: 20px;
+}
+
+
+.shape {
+    width: 98%;
+    aspect-ratio: 1/1;
+    background-color: transparent;
+    border: 3px dotted var(--bg-5);
+    z-index: 1;
+}
+
+.shape-container.cir .shape {
+    border-radius: 50%;
+}
+
+.shape-container.sq .shape, .shape-container.tr .shape {
+    border-radius: 20px;
+}

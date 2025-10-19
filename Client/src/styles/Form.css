@@ -1,0 +1,402 @@
+/*=================================================[LOGIN COMPONENT]=================================================*/
+.form-card {
+  border-radius: 16px !important;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  max-width: 500px;
+  margin: 10px 0 50px;
+  height: fit-content;
+}
+
+.custom-input {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid var(--bg-4) !important;
+  border-radius: 8px !important;
+  color: var(--main-txt-2) !important;
+  transition: all 0.3s ease;
+}
+
+.custom-input:hover,
+.custom-input:focus {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: var(--second-txt) !important;
+  box-shadow: 0 0 0 2px rgba(0, 0, 214, 0.2) !important;
+}
+
+::placeholder {
+  color: var(--main-txt-1) !important;
+}
+
+svg {
+  color: var(--main-txt-3) !important;
+}
+
+.custom-input input {
+  background: var !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+.custom-input input:focus {
+  box-shadow: none !important;
+}
+
+.ant-form-item-label>label {
+  color: var(--main-txt-2) !important;
+  font-weight: 500;
+}
+
+.login-btn,
+.delete-btn {
+  border: none !important;
+  border-radius: 8px !important;
+  color: white !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 214, 0.3);
+}
+
+.login-btn {
+  background: linear-gradient(135deg, var(--bg-3), var(--bg-5)) !important;
+}
+
+.delete-btn {
+  background: linear-gradient(135deg, red, darkred) !important;
+}
+
+.login-btn:hover {
+  background: linear-gradient(135deg, var(--bg-4), var(--bg-5)) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 214, 0.4);
+}
+
+.login-btn:focus {
+  background: linear-gradient(135deg, var(--bg-3), var(--bg-5)) !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 214, 0.3);
+}
+
+.delete-btn:hover {
+  transform: scale(1.05);
+  box-shadow: inset 0 0 0 50px rgba(0, 0, 0, 0.3);
+}
+
+.oauth-btn {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: var(--main-txt-2) !important;
+  transition: all 0.3s ease;
+  border-radius: 10px !important;
+}
+
+.oauth-btn:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: var(--main-txt-2) !important;
+  transform: translateY(-1px);
+}
+
+.google-btn:hover {
+  border-color: #db4437 !important;
+  color: #db4437 !important;
+}
+
+.google-auth-loading {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.google-auth-loading svg {
+  font-size: 50px;
+}
+
+.ant-divider {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.ant-divider-inner-text {
+  color: var(--main-txt-2) !important;
+}
+
+.ant-message {
+  z-index: 1000;
+}
+
+.ant-message-notice-content {
+  background: rgba(8, 8, 61, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(10px);
+  color: var(--main-txt-2) !important;
+}
+
+.ant-form-item-explain-error {
+  font-size: 22px;
+}
+
+.sign-up {
+  border-top: 2px dotted var(--bg-5);
+  padding-top: 10px;
+}
+
+.sign-up a {
+  text-decoration: none !important;
+  color: blue;
+  transition: .3s;
+}
+
+.sign-up a:hover {
+  opacity: .7;
+}
+
+
+.ant-input-data-count {
+  font-size: 25px !important;
+  color: var(--main-txt-3) !important;
+  bottom: -40px !important;
+
+}
+
+.ant-upload-list-item-actions svg {
+  color: #fff !important;
+}
+
+.ant-upload-list-item-container {
+  width: 150px !important;
+  height: 150px !important;
+  margin: auto !important;
+  color: var(--main-txt-3) !important;
+  font-size: 20px;
+  border-color: blue !important;
+}
+
+.ant-upload-list-item-thumbnail img {
+  border-radius: 50% !important;
+}
+
+/* Custom Select Component Styles */
+.ant-select {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid var(--bg-4) !important;
+  border-radius: 8px !important;
+  color: var(--main-txt-2) !important;
+  transition: all 0.3s ease;
+}
+
+.ant-select:hover,
+.ant-select:focus {
+  background: darkblue !important;
+  border-color: var(--second-txt) !important;
+  box-shadow: 0 0 0 2px rgba(0, 0, 214, 0.2) !important;
+}
+
+.ant-select-selector {
+  background: transparent !important;
+  border: none !important;
+  color: var(--main-txt-2) !important;
+  border-radius: 8px !important;
+  color: var(--main-txt-3) !important;
+  font-size: 22px !important;
+}
+
+.ant-select-selection-placeholder {
+  color: var(--main-txt-2) !important;
+  font-size: 22px !important;
+}
+
+.ant-select-selection-item {
+  color: var(--main-txt-2) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid var(--bg-4) !important;
+  border-radius: 6px !important;
+}
+
+.ant-select-dropdown {
+  background: var(--bg-2) !important;
+  border: 1px solid var(--bg-4) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+
+}
+
+.ant-select-item {
+  color: var(--main-txt-2) !important;
+  background: transparent !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease;
+}
+
+.ant-select-item:hover {
+  background: rgba(0, 0, 255, 0.2) !important;
+  color: var(--main-txt-1) !important;
+}
+
+.ant-select-item-option-selected {
+  background: rgba(0, 0, 214, 0.2) !important;
+  color: var(--main-txt-1) !important;
+}
+
+.ant-select-arrow {
+  color: var(--main-txt-3) !important;
+}
+
+.ant-select-clear {
+  color: var(--main-txt-3) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 50%;
+}
+
+/* Empty/Not Found Message Styles */
+.ant-select-empty {
+  color: var(--main-txt-3) !important;
+  padding: 16px !important;
+  text-align: center !important;
+  font-size: 16px !important;
+  opacity: 0.7 !important;
+}
+
+.ant-select-not-found {
+  color: var(--main-txt-3) !important;
+  padding: 16px !important;
+  text-align: center !important;
+  font-size: 16px !important;
+  opacity: 0.7 !important;
+}
+
+/* Style for the empty icon if present */
+.ant-select-empty img,
+.ant-select-empty svg,
+.ant-select-not-found img,
+.ant-select-not-found svg {
+  opacity: 0.5 !important;
+  margin-bottom: 8px !important;
+}
+
+
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .d-flex.gap-3 {
+    flex-direction: column;
+    gap: 1rem !important;
+  }
+
+  .oauth-btn {
+    width: 100% !important;
+  }
+}
+
+
+
+.img-placeholder {
+  cursor: pointer;
+  margin: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px dotted var(--bg-5) !important;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 3px dotted var(--main-color);
+  position: relative;
+  overflow: hidden;
+}
+
+.img-placeholder img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+}
+
+.img-placeholder svg {
+  font-size: 30px;
+}
+
+.img-placeholder input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+
+.img-placeholder-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  transition: .3s;
+}
+
+.img-placeholder:hover .img-placeholder-overlay.active {
+  opacity: 1;
+}
+
+.digital-info-title svg {
+  color: blue !important;
+}
+
+
+ul.manage-card-options {
+  display: flex;
+  justify-content: space-between;
+  width: 75%;
+  min-width: fit-content;
+  gap: 5px;
+  padding: 5px;
+  position: sticky;
+  top: 8px;
+  background-image: linear-gradient(135deg, rgba(0, 0, 50, 0.8), rgba(0, 0, 100, 0.4));
+  z-index: 10;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border: 2px dotted blue;
+  border-radius: 10px;
+  margin: auto;
+}
+
+ul.manage-card-options li {
+  text-decoration: none;
+  color: var(--main-txt-1);
+  font-size: 18px;
+  padding: 2px 20px;
+  border-radius: 8px;
+  transition: background-color 0.3s, color 0.3s;
+  text-transform: capitalize;
+  transition: .3s !important;
+  cursor: pointer;
+}
+
+ul.manage-card-options li svg {
+  color: var(--main-txt-1) !important;
+  font-size: 20px;
+  transition: .3s !important;
+}
+
+ul.manage-card-options li:hover,
+ul.manage-card-options li.active-sec {
+  background-color: rgb(1, 1, 211);
+  color: white;
+}
+
+ul.manage-card-options li:hover svg {
+  color: white !important;
+}
+
+ul.manage-card-options li.active-sec svg {
+  color: white !important;
+}

@@ -1,0 +1,50 @@
+{
+    "project": "Qarty API",
+    "version": "1.0.0",
+    "description": "API for user authentication and digital card management.",
+    "developer": "Mohammed Ashraf",
+    "documentation": {
+        "Auth": {
+            "description": "Authentication and user session endpoints",
+            "routes": {
+                "/auth/signup": {
+                    "method": "POST",
+                    "summary": "Register a new user"
+                },
+                "/auth/login": {
+                    "method": "POST",
+                    "summary": "Login and receive access token (access token in body, refresh token as cookie)"
+                },
+                "/auth/refresh-token": {
+                    "method": "POST",
+                    "summary": "Refresh access token using refresh token cookie"
+                },
+                "/auth/logout": {
+                    "method": "POST",
+                    "summary": "Logout (clears refresh token cookie)"
+                }
+            }
+        },
+        "Digital Card": {
+            "description": "Endpoints for creating, updating, deleting, and fetching digital cards",
+            "routes": {
+                "/api/digital-card/getDigitalCard/{userCardID}": {
+                    "method": "GET",
+                    "summary": "Get a public digital card by user ID"
+                },
+                "/api/digital-card/create": {
+                    "method": "POST",
+                    "summary": "Create a new digital card (protected)"
+                },
+                "/api/digital-card/delete": {
+                    "method": "DELETE",
+                    "summary": "Delete the authenticated user's digital card (protected)"
+                },
+                "/api/digital-card/update": {
+                    "method": "PUT",
+                    "summary": "Update the authenticated user's digital card (protected)"
+                }
+            }
+        }
+    }
+}
