@@ -1,9 +1,8 @@
 import { refreshToken } from "./Auth";
 
 
-
 export const getDigitalCard = async (udc) => {
-    const res = await fetch(`${import.meta.env.VITE_SERVER_HOST}/api/digital-card/getDigitalCard/${udc}`, {
+    const res = await fetch(`${import.meta.env.VITE_SERVER_HOST}/api/digital-card/${udc}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -14,7 +13,7 @@ export const getDigitalCard = async (udc) => {
 }
 
 export const createDigitalCard = async (digitalCardInput, tokenState) => {
-    let res = await fetch(`${import.meta.env.VITE_SERVER_HOST}/api/digital-card/create`, {
+    let res = await fetch(`${import.meta.env.VITE_SERVER_HOST}/api/digital-card`, {
         method: "POST",
         headers: {
             "Authorization": `Bearer ${tokenState.accessToken}`
@@ -39,7 +38,7 @@ export const createDigitalCard = async (digitalCardInput, tokenState) => {
 }
 
 export const updateDigitalCard = async (digitalCardInput, tokenState) => {
-    let res = await fetch(`${import.meta.env.VITE_SERVER_HOST}/api/digital-card/update`, {
+    let res = await fetch(`${import.meta.env.VITE_SERVER_HOST}/api/digital-card`, {
         method: "PUT",
         headers: {
             "Authorization": `Bearer ${tokenState.accessToken}`
@@ -63,8 +62,9 @@ export const updateDigitalCard = async (digitalCardInput, tokenState) => {
         return await formatRes(res);
     }
 }
+
 export const deleteDigitalCard = async (tokenState) => {
-    let res = await fetch(`${import.meta.env.VITE_SERVER_HOST}/api/digital-card/delete`, {
+    let res = await fetch(`${import.meta.env.VITE_SERVER_HOST}/api/digital-card`, {
         method: "DELETE",
         headers: {
             "Authorization": `Bearer ${tokenState.accessToken}`

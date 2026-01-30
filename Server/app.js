@@ -3,12 +3,15 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const PORT = process.env.PORT || 3000;
-const mongoose = require('mongoose');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./api-docs.json');
 const allowedOrigins = require("./config/origins");
 const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/authRoutes');
 const digitalCardRouter = require('./routes/digitalCardRoutes');
-const path = require("path");
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+dns.setDefaultResultOrder('ipv4first');
 
 
 app.use(cors({
@@ -22,22 +25,15 @@ app.use(express.json());
 app.use(cookieParser());
 
 
-
 // ROUTES
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(require('./middlewares/mongoDBConnectionMW')); // Check DB Connection (FIX: MongoDB Sleep)
 app.use("/auth", authRouter);
 app.use("/api/digital-card", digitalCardRouter);
-app.get("/", (req, res) => {
-    res.send(require("./config/endpointsDoc.json"));
+
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT} ...`);
 });
-
-
-mongoose.connect(process.env.MONGODB_URI).then(() => {
-    console.log("Connected to MongoDB ...");
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT} ...`);
-    });
-}).catch((err) => {
-    console.log("Error connecting to MongoDB", err);
-})
 
 module.exports = app;

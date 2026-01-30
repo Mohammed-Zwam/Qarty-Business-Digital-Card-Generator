@@ -4,7 +4,9 @@ const Home = () => {
     return (
         <div className="home-page">
             <div className="landing mt-5 d-flex justify-content-around align-items-center motion">
-                <img className='w-50 img-animation' src="/assets/Images/home.webp" alt="" />
+                <div className='w-50 img-animation img-container'>
+                    <img className='w-100' src="/assets/Images/home.webp" alt="" loading='eager' />
+                </div>
                 <div className='d-flex flex-column'>
                     <h1 className='display-1 txt2 fw-medium txt-shadow' >
                         Go

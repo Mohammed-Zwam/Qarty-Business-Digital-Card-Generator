@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 import { Result } from 'antd';
-import Header from '../components/Header';
 import { UserContext } from '../context/UserContext';
 import { Link } from 'react-router-dom';
 const NotFound = () => {

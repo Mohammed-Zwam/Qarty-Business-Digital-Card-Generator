@@ -1,0 +1,833 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Qarty Digital Card API",
+    "version": "1.0.0",
+    "description": "Qarty is a API for managing digital business cards with JWT authentication, image uploads to Cloudinary, and MongoDB database integration",
+    "contact": {
+      "name": "Mohammed Ashraf Sayed Zwam"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json",
+    "multipart/form-data"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'"
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "required": [
+        "username",
+        "email",
+        "password"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "MongoDB unique identifier"
+        },
+        "username": {
+          "type": "string",
+          "description": "Username (3-20 characters, starts with letter or '_', contains only letters, numbers, '_' or '-')",
+          "example": "john_doe"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "User email address",
+          "example": "john@example.com"
+        },
+        "password": {
+          "type": "string",
+          "description": "Password (minimum 8 characters with uppercase, lowercase, number, and special character)",
+          "example": "SecurePass123!"
+        },
+        "hasDigitalCard": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether user has created a digital card"
+        }
+      }
+    },
+    "DigitalCard": {
+      "type": "object",
+      "required": [
+        "name",
+        "position",
+        "description",
+        "links",
+        "imgSrc",
+        "imgId"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "MongoDB unique identifier"
+        },
+        "userID": {
+          "type": "string",
+          "description": "Reference to the user who owns this card"
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name (letters and Arabic characters only)",
+          "example": "أحمد محمد"
+        },
+        "position": {
+          "type": "string",
+          "description": "Job position or title",
+          "example": "Senior Software Engineer"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Bio or professional description",
+          "example": "Experienced full-stack developer with expertise in modern web technologies"
+        },
+        "imgSrc": {
+          "type": "string",
+          "description": "URL of the profile image hosted on Cloudinary",
+          "example": "https://res.cloudinary.com/..."
+        },
+        "imgId": {
+          "type": "string",
+          "description": "Cloudinary image ID for deletion purposes",
+          "example": "qarty/profile_abc123"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CardLink"
+          },
+          "description": "Array of social and contact links"
+        }
+      }
+    },
+    "CardLink": {
+      "type": "object",
+      "required": [
+        "linkName",
+        "linkUrl"
+      ],
+      "properties": {
+        "linkName": {
+          "type": "string",
+          "enum": [
+            "whatsapp",
+            "phone number",
+            "email",
+            "linkedin",
+            "facebook",
+            "youtube",
+            "website",
+            "github",
+            "x",
+            "behance",
+            "cv"
+          ],
+          "description": "Type of social or contact link"
+        },
+        "linkUrl": {
+          "type": "string",
+          "description": "URL or contact information for the link",
+          "example": "https://linkedin.com/in/john-doe"
+        }
+      }
+    },
+    "SuccessResponse": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean",
+          "example": false
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "AuthToken": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string"
+        },
+        "accessToken": {
+          "type": "string",
+          "description": "JWT access token (valid for 15 minutes)",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        },
+        "user": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "userID": {
+              "type": "string"
+            },
+            "hasDigitalCard": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Register a new user",
+        "description": "Create a new user account with validated credentials. Password must be strong (8+ chars with uppercase, lowercase, number, and special character)",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "username",
+                "email",
+                "password"
+              ],
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "john_doe",
+                  "description": "3-20 characters, must start with letter or '_', contain only letters, numbers, '_' or '-'"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email",
+                  "example": "john@example.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "SecurePass123!",
+                  "description": "Minimum 8 characters with uppercase, lowercase, number, and special character"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ok": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "User Created Successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - User already exists or validation failed",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Login user",
+        "description": "Authenticate user with email and password. Returns access token and refresh token (in httpOnly cookie)",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "email",
+                "password"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email",
+                  "example": "john@example.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "SecurePass123!"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "schema": {
+              "$ref": "#/definitions/AuthToken"
+            }
+          },
+          "400": {
+            "description": "Bad Request - Wrong email or password",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh-token": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Refresh access token",
+        "description": "Generate a new access token using the refresh token stored in cookies. Refresh token is valid for 7 days",
+        "responses": {
+          "201": {
+            "description": "Access token refreshed successfully",
+            "schema": {
+              "$ref": "#/definitions/AuthToken"
+            }
+          },
+          "401": {
+            "description": "Unauthorized - No refresh token provided",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden - Invalid or expired refresh token",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Logout user",
+        "description": "Clear refresh token cookie and logout the user",
+        "responses": {
+          "200": {
+            "description": "Logout successful",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ok": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Logout Successful"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/digital-card/{userCardID}": {
+      "get": {
+        "tags": [
+          "Digital Card"
+        ],
+        "summary": "Get digital card by user ID",
+        "description": "Retrieve a published digital card using the user's ID. This is a public endpoint that requires no authentication",
+        "parameters": [
+          {
+            "name": "userCardID",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "MongoDB user ID",
+            "example": "507f1f77bcf86cd799439011"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Digital card retrieved successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ok": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Digital Card Retrieved"
+                },
+                "digitalCard": {
+                  "$ref": "#/definitions/DigitalCard"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Digital card does not exist",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/digital-card": {
+      "post": {
+        "tags": [
+          "Digital Card"
+        ],
+        "summary": "Create a new digital card",
+        "description": "Create a new digital card for the authenticated user. User can only have one digital card. Includes image upload to Cloudinary",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "image",
+            "in": "formData",
+            "required": true,
+            "type": "file",
+            "description": "Profile image file"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "Full name (letters and Arabic characters only)",
+            "example": "أحمد محمد"
+          },
+          {
+            "name": "position",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "Job position or title",
+            "example": "Senior Software Engineer"
+          },
+          {
+            "name": "description",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "Bio or professional description (max 500 characters)",
+            "example": "Experienced full-stack developer"
+          },
+          {
+            "name": "links",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "JSON string array of links",
+            "example": "[{\"linkName\":\"email\",\"linkUrl\":\"john@example.com\"},{\"linkName\":\"linkedin\",\"linkUrl\":\"https://linkedin.com/in/john\"}]"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Digital card created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ok": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Digital Card Created"
+                },
+                "digitalCard": {
+                  "$ref": "#/definitions/DigitalCard"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Digital card already exists or validation failed",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid access token",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden - Invalid or expired access token",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Digital Card"
+        ],
+        "summary": "Update digital card",
+        "description": "Update the authenticated user's digital card. Image upload is optional; if not provided, existing image is retained",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "image",
+            "in": "formData",
+            "required": false,
+            "type": "file",
+            "description": "New profile image file (optional)"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "Full name (letters and Arabic characters only)",
+            "example": "أحمد محمد"
+          },
+          {
+            "name": "position",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "Job position or title",
+            "example": "Senior Software Engineer"
+          },
+          {
+            "name": "description",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "Bio or professional description (max 500 characters)",
+            "example": "Experienced full-stack developer"
+          },
+          {
+            "name": "links",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "JSON string array of links",
+            "example": "[{\"linkName\":\"email\",\"linkUrl\":\"john@example.com\"},{\"linkName\":\"linkedin\",\"linkUrl\":\"https://linkedin.com/in/john\"}]"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Digital card updated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ok": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Digital Card Updated"
+                },
+                "digitalCard": {
+                  "$ref": "#/definitions/DigitalCard"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Digital card does not exist or validation failed",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid access token",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden - Invalid or expired access token",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Digital Card"
+        ],
+        "summary": "Delete digital card",
+        "description": "Delete the authenticated user's digital card. Removes associated image from Cloudinary",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Digital card deleted successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ok": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Digital Card Deleted"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Digital card does not exist",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid access token",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden - Invalid or expired access token",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "User authentication endpoints (signup, login, token refresh, logout)"
+    },
+    {
+      "name": "Digital Card",
+      "description": "Digital card management endpoints (create, read, update, delete)"
+    }
+  ],
+  "x-middleware": {
+    "description": "Middleware and validation details",
+    "authentication": {
+      "name": "authMW",
+      "description": "JWT bearer token validation middleware",
+      "requirements": "Authorization header with 'Bearer {token}' format",
+      "tokenExpiry": "15 minutes for access token, 7 days for refresh token"
+    },
+    "validations": {
+      "registerDataValidator": {
+        "name": "validateRegisterDataMW",
+        "schema": "AJV-based schema validation",
+        "fields": {
+          "username": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_-]{2,19}$",
+            "description": "3-20 characters, starts with letter or '_', contains only letters, numbers, '_' or '-'"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Valid email format"
+          },
+          "password": {
+            "type": "string",
+            "format": "strongPassword",
+            "description": "Minimum 8 characters with at least one uppercase, one lowercase, one number, and one special character"
+          }
+        }
+      },
+      "loginDataValidator": {
+        "name": "validateLoginDataMW",
+        "schema": "AJV-based schema validation",
+        "fields": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Valid email format"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password"
+          }
+        }
+      },
+      "digitalCardDataValidator": {
+        "name": "validateDigitalCardDataMW",
+        "schema": "AJV-based schema validation",
+        "fields": {
+          "name": {
+            "type": "string",
+            "pattern": "^[\\u0600-\\u06FFa-zA-Z\\s]+$",
+            "description": "Letters and Arabic characters only"
+          },
+          "position": {
+            "type": "string",
+            "description": "Job position"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "Professional description"
+          },
+          "imgSrc": {
+            "type": "string",
+            "description": "Image source URL from Cloudinary"
+          },
+          "imgId": {
+            "type": "string",
+            "description": "Cloudinary image ID"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "linkName": {
+                "type": "string",
+                "enum": [
+                  "whatsapp",
+                  "phone number",
+                  "email",
+                  "linkedin",
+                  "facebook",
+                  "youtube",
+                  "website",
+                  "github",
+                  "x",
+                  "behance",
+                  "cv"
+                ]
+              },
+              "linkUrl": {
+                "type": "string"
+              }
+            },
+            "description": "Social and contact links"
+          }
+        }
+      }
+    },
+    "imageProcessing": {
+      "uploadImage": {
+        "name": "uploadImgToCloudinary",
+        "description": "Middleware for uploading images to Cloudinary",
+        "triggers": "POST and PUT requests for digital cards with image files",
+        "output": "Sets req.body.imgSrc and req.body.imgId from Cloudinary response"
+      },
+      "readImage": {
+        "name": "readImgFile",
+        "description": "Middleware for reading and parsing image files from multipart form data",
+        "triggers": "POST and PUT requests for digital cards",
+        "parser": "Multer - single file upload"
+      }
+    },
+    "database": {
+      "mongoDBConnection": {
+        "name": "mongoDBConnectionMW",
+        "description": "Establishes MongoDB connection before processing requests",
+        "applied": "Applied globally to all routes"
+      }
+    }
+  }
+}

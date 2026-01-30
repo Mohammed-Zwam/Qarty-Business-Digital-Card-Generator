@@ -8,7 +8,9 @@ const Profile = () => {
     return (
         <div>
             <div className="landing d-flex align-items-center justify-content-center motion">
-                <img className='w-50 img-animation' src="/assets/Images/profile.webp" alt="" />
+                <div className='w-50 img-animation img-container'>
+                    <img className='w-100' src="/assets/Images/profile.webp" alt="" loading="eager" />
+                </div>
                 <div>
                     <h1 className='display-3 txt3 fw-semibold'>Hello <span className="txt4 txt-shadow">{user.username} !</span></h1>
                     <p className="display-6 txt2">

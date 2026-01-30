@@ -6,15 +6,15 @@ const authMW = require("../middlewares/authMW");
 const upload = require('../middlewares/readImgFile');
 const uploadImgToCloudinary = require("../middlewares/uploadImgToCloudinary");
 
-router.get("/getDigitalCard/:userCardID", digitalCardController.getDigitalCard);
+router.get("/:userCardID", digitalCardController.getDigitalCard);
 
 
 
 // PROTECTED ROUTES
 router.use(authMW);
-router.post("/create", upload.single("image"), uploadImgToCloudinary, validateDigitalCardDataMW, digitalCardController.createDigitalCard);
-router.delete("/delete", digitalCardController.deleteDigitalCard);
-router.put("/update", upload.single("image"), uploadImgToCloudinary, validateDigitalCardDataMW, digitalCardController.updateDigitalCard);
+router.post("/", upload.single("image"), uploadImgToCloudinary, validateDigitalCardDataMW, digitalCardController.createDigitalCard);
+router.delete("/", digitalCardController.deleteDigitalCard);
+router.put("/", upload.single("image"), uploadImgToCloudinary, validateDigitalCardDataMW, digitalCardController.updateDigitalCard);
 
 
 module.exports = router;

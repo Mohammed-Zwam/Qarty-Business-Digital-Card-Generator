@@ -4,8 +4,8 @@ import { UserContext } from "./UserContext";
 
 
 const UserProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [accessToken, setAccessToken] = useState(null);
+    const [user, setUser] = useState('checking');
+    const [accessToken, setAccessToken] = useState('checking');
     return (
         <UserContext.Provider
             value={{

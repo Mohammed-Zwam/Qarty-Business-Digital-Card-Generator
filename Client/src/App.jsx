@@ -43,7 +43,7 @@ function App() {
       <Shape classes="btm lft cir" />
       <Shape classes="rgt ctr sq" />
       <Shape classes="top ctr tr" />
-      <Header />
+      {/* <Header /> */}
 
       <div className='container min-h-100'>
         <Routes>
@@ -59,8 +59,8 @@ function App() {
             <Route path="/create-card" element={<CreateDigitalCard setViewAnimationCongrats={setViewAnimationCongrats} />} />
             <Route path="/manage-card" element={<ManageDigitalCard />} />
           </Route>
-
           <Route path="/*" element={<NotFound />} />
+
         </Routes>
       </div>
 

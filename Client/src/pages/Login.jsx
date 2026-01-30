@@ -39,6 +39,7 @@ const Login = () => {
             setLoading(false);
         }
     };
+    
     const handleValidate = () => {
         form
             .validateFields()
@@ -58,10 +59,10 @@ const Login = () => {
             const lastSignInTime = user.metadata.lastSignInTime;
             const username = user.displayName.replace(' ', '-');
             const email = user.email;
-            const password = user.uid + "@GoogleAuth-0_0";
+            const password = user.uid + import.meta.env.VITE_FIREBASE_PASSWORD_SALT;
             const isNewUser = creationTime === lastSignInTime;
-
             setGoogleAuthLoading(true);
+            
             if (isNewUser) {
                 const res = await signup({ username, email, password });
                 if (!res.ok) {

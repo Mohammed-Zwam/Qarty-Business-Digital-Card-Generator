@@ -1,34 +1,35 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
-import { Modal } from 'antd';
+import { Modal, Skeleton } from 'antd';
 import { logout } from '../api/Auth';
 import { AlertContext } from '../context/AlertContext';
 import { useLocation } from 'react-router-dom';
-import PoweredByComponent from './PowerdByComponent';
+import PoweredByComponent from './PoweredByComponent';
 
 const Header = () => {
     const { user } = useContext(UserContext);
-    const [option, setOption] = useState('');
+    const [option, setOption] = useState('pending');
     const location = useLocation();
     const renderOptions = {
-        home: <Registration />,
+        registration: <Registration />,
         protected: <ProtectedHeader />
     }
 
     useEffect(() => {
-        if (!user) {
-            if (location.pathname.startsWith('/card')) {
-                setOption('powered-by-header');
+        if (user !== 'checking') {
+            if (!user) {
+                if (location.pathname.startsWith('/card')) {
+                    setOption('powered-by-header');
+                } else {
+                    setOption('registration');
+                }
             } else {
-                setOption('home');
+                setOption('protected');
             }
-        } else {
-            setOption('protected');
         }
     }, [location.pathname, user]);
 
-    {/* <PoweredByComponent /> */ }
     return (
         <div className='container'>
             {
@@ -39,7 +40,12 @@ const Header = () => {
                         <Link to={option === "protected" ? '/profile' : '/'} className='text-decoration-none' >
                             <h1 className='platform-logo display-4 fw-semibold'>Qarty</h1>
                         </Link>
-                        {option && renderOptions[option]}
+                        {
+                            option === 'pending' ?
+                                <Skeleton.Button style={{ width: 200 }} active={true} size={'large'} shape={'round'} />
+                                :
+                                renderOptions[option]
+                        }
                     </header>
             }
         </div>

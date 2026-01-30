@@ -25,7 +25,6 @@ import React, { useEffect, useState } from 'react';
 import { getDigitalCard } from '../api/DigitalCard';
 import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
-import PoweredByComponent from '../components/PowerdByComponent';
 import { downloadCanvasQRCode, handleShare } from '../util/QrCodeMethods';
 const linksIcons = {
     whatsapp: <WhatsAppOutlined />,
@@ -62,15 +61,14 @@ const Card = () => {
             }
             const res = await getDigitalCard(udc);
 
-            setTimeout(() => {
-                if (res.ok) {
-                    setDigitalCard({ ...res.digitalCard });
-                    if (user && user?.userID && user?.userID === udc) {
-                        setUser({ ...user, digitalCard: res.digitalCard });
-                    }
+            if (res.ok) {
+                setDigitalCard({ ...res.digitalCard });
+                if (user && user?.userID && user?.userID === udc) {
+                    setUser({ ...user, digitalCard: res.digitalCard });
                 }
-                setLoading(false);
-            }, 10000);
+            }
+            setLoading(false);
+
         }
         if (user && user?.userID && user?.userID === udc && user.digitalCard) {
             setDigitalCard({ ...user.digitalCard });
