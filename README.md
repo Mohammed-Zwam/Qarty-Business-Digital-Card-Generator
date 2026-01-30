@@ -7,9 +7,9 @@
   </p>
 
   <p>
-    <a href="#features">Features</a> •
-    <a href="#system-flow">System Flow</a> •
-    <a href="#tech-stack">Tech Stack</a>
+    Features •
+    System Flow •
+    Tech Stack
   </p>
 
   <!-- Add status badges here if available, e.g. License, Build Status -->
@@ -27,14 +27,7 @@
 
 Built with a robust **MERN Stack** (MongoDB, Express, React, Node.js), Qarty ensures a seamless experience from secure authentication to real-time card updates.
 
-## ✨ Key Features
-
-*   **Dynamic Card Generator**: Intuitive interface to input your details and generate a professional card instantly.
-*   **User Profiles**: Manage your personal information and multiple cards from a dedicated dashboard.
-*   **Secure Authentication**: Robust security using **JWT (JSON Web Tokens)** with Access & Refresh token rotation.
-*   **Cloud Integration**: Seamless image uploads and asset management powered by **Cloudinary**.
-*   **Responsive Design**: Fully responsive UI built with **Ant Design** and **Bootstrap**, ensuring your card looks great on any device.
-*   **High Performance**: Utilizing **Vite** for lightning-fast frontend tooling.
+---
 
 ## 🛠️ System Flow
 
@@ -43,6 +36,8 @@ Understanding how Qarty works under the hood:
 <div align="center">
   <img src="Assets/System Flow.jpg" alt="Qarty System Flow" width="800">
 </div>
+
+---
 
 ## 💻 Tech Stack
 
@@ -62,6 +57,18 @@ Understanding how Qarty works under the hood:
 *   **Multer & Sharp**: File handling and image processing.
 *   **Swagger**: API documentation.
 
+---
+
+## ✨ Key Features
+
+*   **Dynamic Card Generator**: Intuitive interface to input your details and generate a professional card instantly.
+*   **User Profiles**: Manage your personal information and multiple cards from a dedicated dashboard.
+*   **Secure Authentication**: Robust security using **JWT (JSON Web Tokens)** with Access & Refresh token rotation.
+*   **Cloud Integration**: Seamless image uploads and asset management powered by **Cloudinary**.
+*   **Responsive Design**: Fully responsive UI built with **Ant Design** and **Bootstrap**, ensuring your card looks great on any device.
+*   **High Performance**: Utilizing **Vite** for lightning-fast frontend tooling.
+
+---
 
 ## 📚 API Documentation
 
