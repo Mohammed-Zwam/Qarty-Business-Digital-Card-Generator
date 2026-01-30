@@ -3,8 +3,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const PORT = process.env.PORT || 3000;
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./api-docs.json');
+const path = require('path');
 const allowedOrigins = require("./config/origins");
 const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/authRoutes');
@@ -28,8 +27,9 @@ app.use(cookieParser());
 // ROUTES
 
 app.use(require('./middlewares/mongoDBConnectionMW')); // Check DB Connection (FIX: MongoDB Sleep)
-app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "/assets/api-doc.html"));
+});
 app.use("/auth", authRouter);
 app.use("/api/digital-card", digitalCardRouter);
 

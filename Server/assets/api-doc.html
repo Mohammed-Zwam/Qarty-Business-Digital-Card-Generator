@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qarty Digital Card API Documentation</title>
+    <meta name="description"
+        content="Complete API documentation for Qarty Digital Card - JWT authentication, image uploads, and MongoDB integration">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4F46E5;
+            --primary-dark: #4338CA;
+            --primary-light: #6366F1;
+            --success-color: #10B981;
+            --error-color: #EF4444;
+            --warning-color: #F59E0B;
+            --info-color: #3B82F6;
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-tertiary: #334155;
+            --text-primary: #F1F5F9;
+            --text-secondary: #CBD5E1;
+            --text-muted: #94A3B8;
+            --border-color: #334155;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            padding: 3rem 2rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #fff, #E0E7FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .version {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .header .description {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 800px;
+            margin-bottom: 1.5rem;
+        }
+
+        .header .contact {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+        }
+
+        .header .base-url {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-md);
+            margin-top: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header .base-url strong {
+            color: #fff;
+            margin-right: 0.5rem;
+        }
+
+        .header .base-url code {
+            font-family: 'JetBrains Mono', monospace;
+            color: #A5F3FC;
+            font-size: 0.95rem;
+        }
+
+        /* Navigation */
+        .nav {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .nav h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .nav-tags {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-tag {
+            background: var(--bg-tertiary);
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            font-weight: 500;
+        }
+
+        .nav-tag:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-tag.active {
+            background: var(--primary-color);
+            border-color: var(--primary-light);
+        }
+
+        /* Tag Sections */
+        .tag-section {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .tag-section h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .tag-section h2::before {
+            content: '';
+            width: 4px;
+            height: 2rem;
+            background: linear-gradient(to bottom, var(--primary-color), var(--primary-light));
+            border-radius: 2px;
+        }
+
+        .tag-section .tag-description {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+
+        /* Endpoint Cards */
+        .endpoint {
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .endpoint:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-md);
+        }
+
+        .endpoint-header {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: var(--transition);
+        }
+
+        .endpoint-header:hover {
+            background: rgba(79, 70, 229, 0.1);
+        }
+
+        .method-badge {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            min-width: 70px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .method-get {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+        }
+
+        .method-post {
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            color: white;
+        }
+
+        .method-put {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            color: white;
+        }
+
+        .method-delete {
+            background: linear-gradient(135deg, #EF4444, #DC2626);
+            color: white;
+        }
+
+        .endpoint-path {
+            flex: 1;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .endpoint-summary {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .expand-icon {
+            width: 24px;
+            height: 24px;
+            transition: var(--transition);
+            color: var(--text-muted);
+        }
+
+        .endpoint.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .endpoint-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .endpoint.expanded .endpoint-body {
+            max-height: 5000px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .endpoint-content {
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .endpoint-description {
+            background: rgba(79, 70, 229, 0.1);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-sm);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+            color: var(--text-secondary);
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 1.5rem 0 1rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 3px;
+            height: 1.2rem;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        /* Security Badge */
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(239, 68, 68, 0.15);
+            color: #FCA5A5;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            margin-bottom: 1rem;
+        }
+
+        .security-badge::before {
+            content: '🔒';
+        }
+
+        /* Parameters Table */
+        .params-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        .params-table th {
+            background: var(--bg-tertiary);
+            padding: 0.875rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .params-table td {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .params-table tr:hover {
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .param-name {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--primary-light);
+            font-weight: 500;
+        }
+
+        .param-type {
+            display: inline-block;
+            background: var(--bg-primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: #A5F3FC;
+            border: 1px solid var(--border-color);
+        }
+
+        .required-badge {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.2);
+            color: #FCA5A5;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        /* Response Codes */
+        .responses {
+            margin-top: 1.5rem;
+        }
+
+        .response-item {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.75rem;
+            border-left: 4px solid;
+            transition: var(--transition);
+        }
+
+        .response-item:hover {
+            transform: translateX(4px);
+        }
+
+        .response-200,
+        .response-201 {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .response-400 {
+            border-color: var(--warning-color);
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        .response-401,
+        .response-403 {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .response-500 {
+            border-color: #8B5CF6;
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .response-code {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .response-200 .response-code,
+        .response-201 .response-code {
+            color: var(--success-color);
+        }
+
+        .response-400 .response-code {
+            color: var(--warning-color);
+        }
+
+        .response-401 .response-code,
+        .response-403 .response-code {
+            color: var(--error-color);
+        }
+
+        .response-500 .response-code {
+            color: #A78BFA;
+        }
+
+        .response-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #0D1117;
+            border-radius: var(--radius-sm);
+            padding: 1.25rem;
+            margin: 1rem 0;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: #E6EDF3;
+        }
+
+        .code-block .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .code-block .copy-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Definitions Section */
+        .definitions {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .definitions h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .definition-item {
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .definition-item h3 {
+            color: var(--primary-light);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .property-list {
+            margin-top: 1rem;
+        }
+
+        .property-item {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .property-item:last-child {
+            border-bottom: none;
+        }
+
+        .property-name {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-tertiary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .endpoint {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .endpoint-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .params-table {
+                font-size: 0.875rem;
+            }
+
+            .nav-tags {
+                flex-direction: column;
+            }
+
+            .nav-tag {
+                width: 100%;
+            }
+        }
+
+        /* JSON Syntax Highlighting */
+        .json-key {
+            color: #79C0FF;
+        }
+
+        .json-string {
+            color: #A5D6FF;
+        }
+
+        .json-number {
+            color: #79C0FF;
+        }
+
+        .json-boolean {
+            color: #FFA657;
+        }
+
+        .json-null {
+            color: #FF7B72;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="version">v1.0.0</div>
+                <h1>Qarty Digital Card API</h1>
+                <p class="description">
+                    Qarty is a API for managing digital business cards with JWT authentication, image uploads to
+                    Cloudinary, and MongoDB database integration
+                </p>
+                <p class="contact">
+                    <strong>Developer:</strong> Mohammed Ashraf Sayed Zwam
+                </p>
+                <div class="base-url">
+                    <strong>Base URL:</strong>
+                    <code>https://qarty.vercel.app</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav">
+            <h2>API Categories</h2>
+            <div class="nav-tags">
+                <div class="nav-tag active" onclick="scrollToSection('authentication')">
+                    🔐 Authentication
+                </div>
+                <div class="nav-tag" onclick="scrollToSection('digital-card')">
+                    💳 Digital Card
+                </div>
+                <div class="nav-tag" onclick="scrollToSection('definitions')">
+                    📋 Definitions
+                </div>
+            </div>
+        </div>
+
+        <!-- Authentication Section -->
+        <div id="authentication" class="tag-section">
+            <h2>Authentication</h2>
+            <p class="tag-description">User authentication endpoints (signup, login, token refresh, logout)</p>
+
+            <!-- POST /auth/signup -->
+            <div class="endpoint">
+                <div class="endpoint-header" onclick="toggleEndpoint(this)">
+                    <span class="method-badge method-post">POST</span>
+                    <div style="flex: 1;">
+                        <div class="endpoint-path">/auth/signup</div>
+                        <div class="endpoint-summary">Register a new user</div>
+                    </div>
+                    <svg class="expand-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-content">
+                        <div class="endpoint-description">
+                            Create a new user account with validated credentials. Password must be strong (8+ chars with
+                            uppercase, lowercase, number, and special character)
+                        </div>
+
+                        <div class="section-title">Request Body</div>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">username</span><span
+                                            class="required-badge">required</span></td>
+                                    <td><span class="param-type">string</span></td>
+                                    <td>3-20 characters, must start with letter or '_', contain only letters, numbers,
+                                        '_' or '-'</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">email</span><span
+                                            class="required-badge">required</span></td>
+                                    <td><span class="param-type">string</span></td>
+                                    <td>Valid email address</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">password</span><span
+                                            class="required-badge">required</span></td>
+                                    <td><span class="param-type">string</span></td>
+                                    <td>Minimum 8 characters with uppercase, lowercase, number, and special character
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="section-title">Example Request</div>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <pre>{
+  <span class="json-key">"username"</span>: <span class="json-string">"john_doe"</span>,
+  <span class="json-key">"email"</span>: <span class="json-string">"john@example.com"</span>,
+  <span class="json-key">"password"</span>: <span class="json-string">"SecurePass123!"</span>
+}</pre>
+                        </div>
+
+                        <div class="section-title">Responses</div>
+                        <div class="responses">
+                            <div class="response-item response-201">
+                                <div class="response-code">201 - Created</div>
+                                <div class="response-description">User created successfully</div>
+                            </div>
+                            <div class="response-item response-400">
+                                <div class="response-code">400 - Bad Request</div>
+                                <div class="response-description">User already exists or validation failed</div>
+                            </div>
+                            <div class="response-item response-500">
+                                <div class="response-code">500 - Internal Server Error</div>
+                                <div class="response-description">Server error occurred</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- POST /auth/login -->
+            <div class="endpoint">
+                <div class="endpoint-header" onclick="toggleEndpoint(this)">
+                    <span class="method-badge method-post">POST</span>
+                    <div style="flex: 1;">
+                        <div class="endpoint-path">/auth/login</div>
+                        <div class="endpoint-summary">Login user</div>
+                    </div>
+                    <svg class="expand-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-content">
+                        <div class="endpoint-description">
+                            Authenticate user with email and password. Returns access token and refresh token (in
+                            httpOnly cookie)
+                        </div>
+
+                        <div class="section-title">Request Body</div>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">email</span><span
+                                            class="required-badge">required</span></td>
+                                    <td><span class="param-type">string</span></td>
+                                    <td>User email address</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">password</span><span
+                                            class="required-badge">required</span></td>
+                                    <td><span class="param-type">string</span></td>
+                                    <td>User password</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="section-title">Example Request</div>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <pre>{
+  <span class="json-key">"email"</span>: <span class="json-string">"john@example.com"</span>,
+  <span class="json-key">"password"</span>: <span class="json-string">"SecurePass123!"</span>
+}</pre>
+                        </div>
+
+                        <div class="section-title">Example Response</div>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <pre>{
+  <span class="json-key">"ok"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"Login Successful"</span>,
+  <span class="json-key">"accessToken"</span>: <span class="json-string">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."</span>,
+  <span class="json-key">"user"</span>: {
+    <span class="json-key">"username"</span>: <span class="json-string">"john_doe"</span>,
+    <span class="json-key">"userID"</span>: <span class="json-string">"507f1f77bcf86cd799439011"</span>,
+    <span class="json-key">"hasDigitalCard"</span>: <span class="json-boolean">false</span>
+  }
+}</pre>
+                        </div>
+
+                        <div class="section-title">Responses</div>
+                        <div class="responses">
+                            <div class="response-item response-200">
+                                <div class="response-code">200 - OK</div>
+                                <div class="response-description">Login successful</div>
+                            </div>
+                            <div class="response-item response-400">
+                                <div class="response-code">400 - Bad Request</div>
+                                <div class="response-description">Wrong email or password</div>
+                            </div>
+                            <div class="response-item response-500">
+                                <div class="response-code">500 - Internal Server Error</div>
+                                <div class="response-description">Server error occurred</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- POST /auth/refresh-token -->
+            <div class="endpoint">
+                <div class="endpoint-header" onclick="toggleEndpoint(this)">
+                    <span class="method-badge method-post">POST</span>
+                    <div style="flex: 1;">
+                        <div class="endpoint-path">/auth/refresh-token</div>
+                        <div class="endpoint-summary">Refresh access token</div>
+                    </div>
+                    <svg class="expand-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-content">
+                        <div class="endpoint-description">
+                            Generate a new access token using the refresh token stored in cookies. Refresh token is
+                            valid for 7 days
+                        </div>
+
+                        <div class="section-title">Responses</div>
+                        <div class="responses">
+                            <div class="response-item response-201">
+                                <div class="response-code">201 - Created</div>
+                                <div class="response-description">Access token refreshed successfully</div>
+                            </div>
+                            <div class="response-item response-401">
+                                <div class="response-code">401 - Unauthorized</div>
+                                <div class="response-description">No refresh token provided</div>
+                            </div>
+                            <div class="response-item response-403">
+                                <div class="response-code">403 - Forbidden</div>
+                                <div class="response-description">Invalid or expired refresh token</div>
+                            </div>
+                            <div class="response-item response-500">
+                                <div class="response-code">500 - Internal Server Error</div>
+                                <div class="response-description">Server error occurred</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- POST /auth/logout -->
+            <div class="endpoint">
+                <div class="endpoint-header" onclick="toggleEndpoint(this)">
+                    <span class="method-badge method-post">POST</span>
+                    <div style="flex: 1;">
+                        <div class="endpoint-path">/auth/logout</div>
+                        <div class="endpoint-summary">Logout user</div>
+                    </div>
+                    <svg class="expand-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-content">
+                        <div class="endpoint-description">
+                            Clear refresh token cookie and logout the user
+                        </div>
+
+                        <div class="section-title">Responses</div>
+                        <div class="responses">
+                            <div class="response-item response-200">
+                                <div class="response-code">200 - OK</div>
+                                <div class="response-description">Logout successful</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Digital Card Section -->
+        <div id="digital-card" class="tag-section">
+            <h2>Digital Card</h2>
+            <p class="tag-description">Digital card management endpoints (create, read, update, delete)</p>
+
+            <!-- GET /api/digital-card/{userCardID} -->
+            <div class="endpoint">
+                <div class="endpoint-header" onclick="toggleEndpoint(this)">
+                    <span class="method-badge method-get">GET</span>
+                    <div style="flex: 1;">
+                        <div class="endpoint-path">/api/digital-card/{userCardID}</div>
+                        <div class="endpoint-summary">Get digital card by user ID</div>
+                    </div>
+                    <svg class="expand-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-content">
+                        <div class="endpoint-description">
+                            Retrieve a published digital card using the user's ID. This is a public endpoint that
+                            requires no authentication
+                        </div>
+
+                        <div class="section-title">Path Parameters</div>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">userCardID</span><span
+                                            class="required-badge">required</span></td>
+                                    <td><span class="param-type">string</span></td>
+                                    <td>MongoDB user ID</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="section-title">Responses</div>
+                        <div class="responses">
+                            <div class="response-item response-200">
+                                <div class="response-code">200 - OK</div>
+                                <div class="response-description">Digital card retrieved successfully</div>
+                            </div>
+                            <div class="response-item response-400">
+                                <div class="response-code">400 - Bad Request</div>
+                                <div class="response-description">Digital card does not exist</div>
+                            </div>
+                            <div class="response-item response-500">
+                                <div class="response-code">500 - Internal Server Error</div>
+                                <div class="response-description">Server error occurred</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- POST /api/digital-card -->
+            <div class="endpoint">
+                <div class="endpoint-header" onclick="toggleEndpoint(this)">
+                    <span class="method-badge method-post">POST</span>
+                    <div style="flex: 1;">
+                        <div class="endpoint-path">/api/digital-card</div>
+                        <div class="endpoint-summary">Create a new digital card</div>
+                    </div>
+                    <svg class="expand-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-content">
+                        <div class="security-badge">
+                            Requires Authentication (Bearer Token)
+                        </div>
+
+                        <div class="endpoint-description">
+                            Create a new digital card for the authenticated user. User can only have one digital card.
+                            Includes image upload to Cloudinary
+                        </div>
+
+                        <div class="section-title">Form Data Parameters</div>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">image</span><span
+                                            class="required-badge">required</span></td>
+                                    <td><span class="param-type">file</span></td>
+                                    <td>Profile image file</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">name</span><span class="required-badge">required</span>
+                                    </td>
+                                    <td><span class="param-type">string</span></td>
+                                    <td>Full name (letters and Arabic characters only)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">position</span><span
+                                            class="required-badge">required</span></td>
+                                    <td><span class="param-type">string</span></td>
+                                    <td>Job position or title</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">description</span><span
+                                            class="required-badge">required</span></td>
+                                    <td><span class="param-type">string</span></td>
+                                    <td>Bio or professional description (max 500 characters)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">links</span><span
+                                            class="required-badge">required</span></td>
+                                    <td><span class="param-type">string</span></td>
+                                    <td>JSON string array of links</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="section-title">Example Links Format</div>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <pre>[
+  {
+    <span class="json-key">"linkName"</span>: <span class="json-string">"email"</span>,
+    <span class="json-key">"linkUrl"</span>: <span class="json-string">"john@example.com"</span>
+  },
+  {
+    <span class="json-key">"linkName"</span>: <span class="json-string">"linkedin"</span>,
+    <span class="json-key">"linkUrl"</span>: <span class="json-string">"https://linkedin.com/in/john"</span>
+  }
+]</pre>
+                        </div>
+
+                        <div class="section-title">Responses</div>
+                        <div class="responses">
+                            <div class="response-item response-201">
+                                <div class="response-code">201 - Created</div>
+                                <div class="response-description">Digital card created successfully</div>
+                            </div>
+                            <div class="response-item response-400">
+                                <div class="response-code">400 - Bad Request</div>
+                                <div class="response-description">Digital card already exists or validation failed</div>
+                            </div>
+                            <div class="response-item response-401">
+                                <div class="response-code">401 - Unauthorized</div>
+                                <div class="response-description">Missing or invalid access token</div>
+                            </div>
+                            <div class="response-item response-403">
+                                <div class="response-code">403 - Forbidden</div>
+                                <div class="response-description">Invalid or expired access token</div>
+                            </div>
+                            <div class="response-item response-500">
+                                <div class="response-code">500 - Internal Server Error</div>
+                                <div class="response-description">Server error occurred</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PUT /api/digital-card -->
+            <div class="endpoint">
+                <div class="endpoint-header" onclick="toggleEndpoint(this)">
+                    <span class="method-badge method-put">PUT</span>
+                    <div style="flex: 1;">
+                        <div class="endpoint-path">/api/digital-card</div>
+                        <div class="endpoint-summary">Update digital card</div>
+                    </div>
+                    <svg class="expand-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-content">
+                        <div class="security-badge">
+                            Requires Authentication (Bearer Token)
+                        </div>
+
+                        <div class="endpoint-description">
+                            Update the authenticated user's digital card. Image upload is optional; if not provided,
+                            existing image is retained
+                        </div>
+
+                        <div class="section-title">Form Data Parameters</div>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">image</span></td>
+                                    <td><span class="param-type">file</span></td>
+                                    <td>New profile image file (optional)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">name</span><span class="required-badge">required</span>
+                                    </td>
+                                    <td><span class="param-type">string</span></td>
+                                    <td>Full name (letters and Arabic characters only)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">position</span><span
+                                            class="required-badge">required</span></td>
+                                    <td><span class="param-type">string</span></td>
+                                    <td>Job position or title</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">description</span><span
+                                            class="required-badge">required</span></td>
+                                    <td><span class="param-type">string</span></td>
+                                    <td>Bio or professional description (max 500 characters)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">links</span><span
+                                            class="required-badge">required</span></td>
+                                    <td><span class="param-type">string</span></td>
+                                    <td>JSON string array of links</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="section-title">Responses</div>
+                        <div class="responses">
+                            <div class="response-item response-200">
+                                <div class="response-code">200 - OK</div>
+                                <div class="response-description">Digital card updated successfully</div>
+                            </div>
+                            <div class="response-item response-400">
+                                <div class="response-code">400 - Bad Request</div>
+                                <div class="response-description">Digital card does not exist or validation failed</div>
+                            </div>
+                            <div class="response-item response-401">
+                                <div class="response-code">401 - Unauthorized</div>
+                                <div class="response-description">Missing or invalid access token</div>
+                            </div>
+                            <div class="response-item response-403">
+                                <div class="response-code">403 - Forbidden</div>
+                                <div class="response-description">Invalid or expired access token</div>
+                            </div>
+                            <div class="response-item response-500">
+                                <div class="response-code">500 - Internal Server Error</div>
+                                <div class="response-description">Server error occurred</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DELETE /api/digital-card -->
+            <div class="endpoint">
+                <div class="endpoint-header" onclick="toggleEndpoint(this)">
+                    <span class="method-badge method-delete">DELETE</span>
+                    <div style="flex: 1;">
+                        <div class="endpoint-path">/api/digital-card</div>
+                        <div class="endpoint-summary">Delete digital card</div>
+                    </div>
+                    <svg class="expand-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="endpoint-body">
+                    <div class="endpoint-content">
+                        <div class="security-badge">
+                            Requires Authentication (Bearer Token)
+                        </div>
+
+                        <div class="endpoint-description">
+                            Delete the authenticated user's digital card. Removes associated image from Cloudinary
+                        </div>
+
+                        <div class="section-title">Responses</div>
+                        <div class="responses">
+                            <div class="response-item response-200">
+                                <div class="response-code">200 - OK</div>
+                                <div class="response-description">Digital card deleted successfully</div>
+                            </div>
+                            <div class="response-item response-400">
+                                <div class="response-code">400 - Bad Request</div>
+                                <div class="response-description">Digital card does not exist</div>
+                            </div>
+                            <div class="response-item response-401">
+                                <div class="response-code">401 - Unauthorized</div>
+                                <div class="response-description">Missing or invalid access token</div>
+                            </div>
+                            <div class="response-item response-403">
+                                <div class="response-code">403 - Forbidden</div>
+                                <div class="response-description">Invalid or expired access token</div>
+                            </div>
+                            <div class="response-item response-500">
+                                <div class="response-code">500 - Internal Server Error</div>
+                                <div class="response-description">Server error occurred</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Definitions Section -->
+        <div id="definitions" class="definitions">
+            <h2>📋 Data Models & Definitions</h2>
+
+            <div class="definition-item">
+                <h3>User</h3>
+                <div class="property-list">
+                    <div class="property-item">
+                        <span class="property-name">_id</span>
+                        <span class="param-type">string</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">MongoDB unique identifier</p>
+                    </div>
+                    <div class="property-item">
+                        <span class="property-name">username</span>
+                        <span class="param-type">string</span>
+                        <span class="required-badge">required</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">Username (3-20 characters, starts
+                            with letter or '_', contains only letters, numbers, '_' or '-')</p>
+                    </div>
+                    <div class="property-item">
+                        <span class="property-name">email</span>
+                        <span class="param-type">string</span>
+                        <span class="required-badge">required</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">User email address</p>
+                    </div>
+                    <div class="property-item">
+                        <span class="property-name">password</span>
+                        <span class="param-type">string</span>
+                        <span class="required-badge">required</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">Password (minimum 8 characters with
+                            uppercase, lowercase, number, and special character)</p>
+                    </div>
+                    <div class="property-item">
+                        <span class="property-name">hasDigitalCard</span>
+                        <span class="param-type">boolean</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">Whether user has created a digital
+                            card (default: false)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="definition-item">
+                <h3>DigitalCard</h3>
+                <div class="property-list">
+                    <div class="property-item">
+                        <span class="property-name">_id</span>
+                        <span class="param-type">string</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">MongoDB unique identifier</p>
+                    </div>
+                    <div class="property-item">
+                        <span class="property-name">userID</span>
+                        <span class="param-type">string</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">Reference to the user who owns this
+                            card</p>
+                    </div>
+                    <div class="property-item">
+                        <span class="property-name">name</span>
+                        <span class="param-type">string</span>
+                        <span class="required-badge">required</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">Full name (letters and Arabic
+                            characters only)</p>
+                    </div>
+                    <div class="property-item">
+                        <span class="property-name">position</span>
+                        <span class="param-type">string</span>
+                        <span class="required-badge">required</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">Job position or title</p>
+                    </div>
+                    <div class="property-item">
+                        <span class="property-name">description</span>
+                        <span class="param-type">string</span>
+                        <span class="required-badge">required</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">Bio or professional description
+                            (max 500 characters)</p>
+                    </div>
+                    <div class="property-item">
+                        <span class="property-name">imgSrc</span>
+                        <span class="param-type">string</span>
+                        <span class="required-badge">required</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">URL of the profile image hosted on
+                            Cloudinary</p>
+                    </div>
+                    <div class="property-item">
+                        <span class="property-name">imgId</span>
+                        <span class="param-type">string</span>
+                        <span class="required-badge">required</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">Cloudinary image ID for deletion
+                            purposes</p>
+                    </div>
+                    <div class="property-item">
+                        <span class="property-name">links</span>
+                        <span class="param-type">array</span>
+                        <span class="required-badge">required</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">Array of social and contact links
+                            (CardLink objects)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="definition-item">
+                <h3>CardLink</h3>
+                <div class="property-list">
+                    <div class="property-item">
+                        <span class="property-name">linkName</span>
+                        <span class="param-type">string</span>
+                        <span class="required-badge">required</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">Type of social or contact link</p>
+                        <div class="code-block" style="margin-top: 0.5rem;">
+                            <pre
+                                style="font-size: 0.8rem;">Allowed values: whatsapp, phone number, email, linkedin, facebook, youtube, website, github, x, behance, cv</pre>
+                        </div>
+                    </div>
+                    <div class="property-item">
+                        <span class="property-name">linkUrl</span>
+                        <span class="param-type">string</span>
+                        <span class="required-badge">required</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">URL or contact information for the
+                            link</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="definition-item">
+                <h3>AuthToken</h3>
+                <div class="property-list">
+                    <div class="property-item">
+                        <span class="property-name">ok</span>
+                        <span class="param-type">boolean</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">Success status</p>
+                    </div>
+                    <div class="property-item">
+                        <span class="property-name">message</span>
+                        <span class="param-type">string</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">Response message</p>
+                    </div>
+                    <div class="property-item">
+                        <span class="property-name">accessToken</span>
+                        <span class="param-type">string</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">JWT access token (valid for 15
+                            minutes)</p>
+                    </div>
+                    <div class="property-item">
+                        <span class="property-name">user</span>
+                        <span class="param-type">object</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary);">User information (username, userID,
+                            hasDigitalCard)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleEndpoint(header) {
+            const endpoint = header.parentElement;
+            endpoint.classList.toggle('expanded');
+        }
+
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                // Update active nav tag
+                document.querySelectorAll('.nav-tag').forEach(tag => {
+                    tag.classList.remove('active');
+                });
+                event.target.classList.add('active');
+            }
+        }
+
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling;
+            const text = codeBlock.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = 'var(--success-color)';
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Highlight active section on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.tag-section');
+            const navTags = document.querySelectorAll('.nav-tag');
+
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navTags.forEach(tag => {
+                tag.classList.remove('active');
+                if (tag.getAttribute('onclick').includes(current)) {
+                    tag.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
