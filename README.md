@@ -74,5 +74,5 @@ Understanding how Qarty works under the hood:
 
 The backend API is documented using **Swagger**. 
 Once the server is running, you can access the API docs at:
-`http://qarty-server.vercel.app/`.
+`https://qarty-server.vercel.app/`.
 
