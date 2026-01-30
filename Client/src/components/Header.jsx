@@ -11,6 +11,7 @@ const Header = () => {
     const { user } = useContext(UserContext);
     const [option, setOption] = useState('pending');
     const location = useLocation();
+
     const renderOptions = {
         registration: <Registration />,
         protected: <ProtectedHeader />

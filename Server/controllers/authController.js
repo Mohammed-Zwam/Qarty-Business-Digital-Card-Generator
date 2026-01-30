@@ -105,6 +105,12 @@ const refreshToken = (req, res) => {
             } else {
                 const userID = decoded.userID;
                 const user = await User.findOne({ _id: userID });
+                if (!user) {
+                    return res.status(401).json({
+                        ok: false,
+                        message: "Unauthorized"
+                    });
+                }
                 const accessToken = user.generateAccessToken(decoded.userID);
                 res.status(201).json({
                     ok: true,

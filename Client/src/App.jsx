@@ -43,7 +43,7 @@ function App() {
       <Shape classes="btm lft cir" />
       <Shape classes="rgt ctr sq" />
       <Shape classes="top ctr tr" />
-      {/* <Header /> */}
+      <Header />
 
       <div className='container min-h-100'>
         <Routes>
