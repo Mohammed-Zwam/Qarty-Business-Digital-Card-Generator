@@ -26,7 +26,7 @@ app.use(cookieParser());
 
 
 // ROUTES
-app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.get('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(require('./middlewares/mongoDBConnectionMW')); // Check DB Connection (FIX: MongoDB Sleep)
 app.use("/auth", authRouter);
 app.use("/api/digital-card", digitalCardRouter);
