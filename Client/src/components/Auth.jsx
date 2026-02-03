@@ -52,16 +52,14 @@ const Auth = () => {
 
     const checkToken = async () => {
       const res = await refreshToken();
-      setTimeout(() => {
-        if (res.ok) {
-          setUser(res.user);
-          setAccessToken(res.accessToken);
-        } else {
-          setUser(null);
-          setAccessToken(null);
-        }
-        setIsAuthorized("checked");
-      }, 2000);
+      if (res.ok) {
+        setUser(res.user);
+        setAccessToken(res.accessToken);
+      } else {
+        setUser(null);
+        setAccessToken(null);
+      }
+      setIsAuthorized("checked");
     };
 
     const checkAuthority = async () => {
