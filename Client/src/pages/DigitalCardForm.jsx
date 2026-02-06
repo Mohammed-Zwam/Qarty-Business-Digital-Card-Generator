@@ -50,17 +50,6 @@ const DigitalCardForm = ({
     digitalCard
 }) => {
     const [previewImage, setPreviewImage] = useState(digitalCard ? digitalCard.imgSrc : '');
-    const handleValidate = () => {
-        form
-            .validateFields()
-            .then(() => {
-                setIsDisable(false);
-            })
-            .catch(() => {
-                setIsDisable(true);
-            });
-
-    };
 
     useEffect(() => {
         if (digitalCard) {
@@ -81,8 +70,14 @@ const DigitalCardForm = ({
             form={form}
             name="digitalCard"
             onFinish={onFinish}
-            onChange={handleValidate}
-            layout="vertical"
+              onFieldsChange={() => {
+                const hasErrors = form
+                  .getFieldsError()
+                  .some(({ errors }) => errors.length > 0);
+
+                setIsDisable(hasErrors);
+              }}
+              validateTrigger="onBlur"            layout="vertical"
             size="large"
             initialValues={{
                 name: digitalCard?.name,
@@ -202,7 +197,6 @@ const DigitalCardForm = ({
                 placeholder="Choose Links For Adding"
                 onChange={(event) => {
                     handleLinkSelect(event);
-                    handleValidate();
                 }}
                 options={linkOptions}
                 value={selectedLinks}
